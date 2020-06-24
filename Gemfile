@@ -18,6 +18,7 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'rubocop', '~> 0.86.0'
 gem 'devise', '~> 4.7', '>= 4.7.2'
+gem 'epp-client',           github: 'dotph/epp-client'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

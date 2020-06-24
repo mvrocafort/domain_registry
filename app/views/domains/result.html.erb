@@ -1,0 +1,35 @@
+
+
+
+<% if @domains == nil %>
+  empty
+<% else %>
+<%= link_to 'Do you want to register this domain?', new_domain_path %>
+
+  
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Period</th>
+      <th>Registration Date</th>
+      <th>Expiration Date</th>
+      <th colspan="5"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @domains.each do |domain| %>
+      <tr>
+        <td><%= domain.name %></td>
+        <td><%= domain.period %></td>
+        <td><%= domain.registration_date %></td>
+        <td><%= domain.expiration_date %></td>
+        <td><%= link_to 'Show', domain %></td>
+        <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
+        <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

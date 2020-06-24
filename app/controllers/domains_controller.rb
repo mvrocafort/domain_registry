@@ -62,6 +62,35 @@ class DomainsController < ApplicationController
     end
   end
 
+  def search
+    #insert input validation here
+  end
+
+  def result
+    # host      = "172.16.46.55"
+    # username  = "testmrocafort"
+    # password  = "Password123"
+
+    # client = EPP::Client.new username, password, host
+
+    # command   = EPP::Host::Check.new params[:search]
+    # response  = client.check command
+    # check     = EPP::Host::CheckResponse.new response
+
+    # if check.available?
+    #   puts "available"
+    #   @domains = Domain.search(params[:search])
+    #   flash.now[:notice] = 'Domain available!'
+      
+    # else
+    #   puts "unavailable"
+    #   @domains = nil
+    #   flash.now[:notice] = 'Domain unavailable!'
+    # end
+
+    @domains = Domain.search(params[:search])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_domain
@@ -70,6 +99,6 @@ class DomainsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def domain_params
-      params.require(:domain).permit(:domain_name, :period, :registration_date, :expiration_date)
+      params.require(:domain).permit(:domain_name, :period, :registration_date, :expiration_date, :search)
     end
 end
