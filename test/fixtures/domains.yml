@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  domain_name: MyString
+  period: MyString
+  registration_date: 2020-06-25 00:13:27
+  expiration_date: 2020-06-25 00:13:27
+
+two:
+  domain_name: MyString
+  period: MyString
+  registration_date: 2020-06-25 00:13:27
+  expiration_date: 2020-06-25 00:13:27

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Domain name:</strong>
+  <%= @domain.domain_name %>
+</p>
+
+<p>
+  <strong>Period:</strong>
+  <%= @domain.period %>
+</p>
+
+<p>
+  <strong>Registration date:</strong>
+  <%= @domain.registration_date %>
+</p>
+
+<p>
+  <strong>Expiration date:</strong>
+  <%= @domain.expiration_date %>
+</p>
+
+<%= link_to 'Edit', edit_domain_path(@domain) %> |
+<%= link_to 'Back', domains_path %>
