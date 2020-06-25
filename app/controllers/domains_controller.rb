@@ -25,7 +25,7 @@ class DomainsController < ApplicationController
   # POST /domains
   # POST /domains.json
   def create
-    @domain = Domain.new(domain_params)
+    @domain = current_user.domains.new(domain_params)
 
     respond_to do |format|
       if @domain.save
@@ -67,15 +67,15 @@ class DomainsController < ApplicationController
   end
 
   def result
-    # host      = "172.16.46.55"
-    # username  = "testmrocafort"
-    # password  = "Password123"
+    host      = "172.16.46.55"
+    username  = "testmrocafort"
+    password  = "Password123"
 
-    # client = EPP::Client.new username, password, host
+    client = EPP::Client.new username, password, host
 
-    # command   = EPP::Host::Check.new params[:search]
-    # response  = client.check command
-    # check     = EPP::Host::CheckResponse.new response
+    command   = EPP::Host::Check.new params[:search]
+    response  = client.check command
+    check     = EPP::Host::CheckResponse.new response
 
     # if check.available?
     #   puts "available"
@@ -87,8 +87,10 @@ class DomainsController < ApplicationController
     #   @domains = nil
     #   flash.now[:notice] = 'Domain unavailable!'
     # end
-
-    @domains = Domain.search(params[:search])
+    @domains = current_user.domains.search(params[:search])
+    #@domains = current_user.domains
+    #@domains = current_user.domains.search(params[:search])
+    #@domains = Domain.search(params[:search])
   end
 
   private

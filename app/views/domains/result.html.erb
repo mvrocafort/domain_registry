@@ -1,6 +1,4 @@
 
-
-
 <% if @domains == nil %>
   empty
 <% else %>
@@ -14,17 +12,19 @@
       <th>Period</th>
       <th>Registration Date</th>
       <th>Expiration Date</th>
+      <th>Owner</th>
       <th colspan="5"></th>
     </tr>
   </thead>
-
+  
   <tbody>
     <% @domains.each do |domain| %>
       <tr>
-        <td><%= domain.name %></td>
+        <td><%= domain.domain_name %></td>
         <td><%= domain.period %></td>
         <td><%= domain.registration_date %></td>
         <td><%= domain.expiration_date %></td>
+        <td><%= domain.user.first_name %></td>
         <td><%= link_to 'Show', domain %></td>
         <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
         <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
