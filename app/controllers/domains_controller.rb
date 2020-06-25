@@ -84,9 +84,10 @@ class DomainsController < ApplicationController
         
           client = EPP::Client.new username, password, host
         
-          command   = EPP::Host::Check.new params[:search]
+          #epp checker for domain availability
+          command   = EPP::Domain::Check.new(params[:search])
           response  = client.check command
-          check     = EPP::Host::CheckResponse.new response
+          check     = EPP::Domain::CheckResponse.new response
         
           if check.available? #if available, show register link to user (use a flag to be used in view)
             @domains = Domain.search(params[:search])
