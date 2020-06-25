@@ -67,30 +67,39 @@ class DomainsController < ApplicationController
   end
 
   def result
-    host      = "172.16.46.55"
-    username  = "testmrocafort"
-    password  = "Password123"
-
-    client = EPP::Client.new username, password, host
-
-    command   = EPP::Host::Check.new params[:search]
-    response  = client.check command
-    check     = EPP::Host::CheckResponse.new response
-
-    # if check.available?
-    #   puts "available"
-    #   @domains = Domain.search(params[:search])
-    #   flash.now[:notice] = 'Domain available!'
-      
-    # else
-    #   puts "unavailable"
-    #   @domains = nil
-    #   flash.now[:notice] = 'Domain unavailable!'
-    # end
-    @domains = current_user.domains.search(params[:search])
+    #@domains = Domain.search(params[:search])
     #@domains = current_user.domains
     #@domains = current_user.domains.search(params[:search])
     #@domains = Domain.search(params[:search])
+    @renew_flag = false
+    @available_flag = false
+
+    if current_user.domains.search(params[:search]) != nil #there are domains available for renewal for current user
+      @domains = current_user.domains.search(params[:search]) #return domains of user
+      @renew_flag = true
+    else #no registered domains under current user, check in epp if available
+      		host      = "172.16.46.55"
+          username  = "testmrocafort"
+          password  = "Password123"
+        
+          client = EPP::Client.new username, password, host
+        
+          command   = EPP::Host::Check.new params[:search]
+          response  = client.check command
+          check     = EPP::Host::CheckResponse.new response
+        
+          if check.available? #if available, show register link to user (use a flag to be used in view)
+            @domains = Domain.search(params[:search])
+            flash.now[:notice] = 'Domain available!'
+            @available_flag = true
+
+            #temp variable to pass input to register model
+            @search_temp = params[:search]
+          else #if not available, do nothing
+            redirect_to '/'
+            flash[:notice] = 'Domain unavailable!'
+          end
+    end
   end
 
   private
