@@ -34,4 +34,65 @@
   <div class="actions">
     <%= form.submit %>
   </div>
+
+  <p>Registrant:</p>
+  <%= form.fields_for :registrants do |registrant| %>
+    <%= registrant.text_field :handle %>
+  <% end %>
 <% end %>
+
+<div id="paypal-checkout"></div>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+  paypal.Button.render({
+    env: "sandbox",
+    client: {
+      sandbox: "AW4I8tHeTC_xdRHrcvpgD2RgBHC-QlhnNO3uP_ZyUjpCanJbxbMvM3qI9nbnSv2ZtrMf_jNOZMuJV055"
+    },
+    style: {
+      layout: 'vertical',
+      size:  'medium',
+      shape: 'rect',
+      color: 'blue',
+    },
+    commit: true,
+    funding: {
+      allowed: [paypal.FUNDING.CARD],
+      disallowed: [paypal.FUNDING.CREDIT]
+    },
+    payment: function(data, actions) {
+      var domain_name_temp = document.getElementById("domain_domain_name").value
+      var period_temp = document.getElementById("domain_period").value
+      params = {domain_name: domain_name_temp, period: period_temp};
+      
+      createPath = "http://127.0.0.1:3000/payment/create"
+      return actions.request.post(createPath, params).then(function(response) {
+        console.log(response);
+        return response.id;
+      });
+    },
+    onAuthorize: function(data, actions) {
+      var domain_name_temp = document.getElementById("domain_domain_name").value
+      var period_temp = document.getElementById("domain_period").value
+
+      params = {
+        payment_id: data.paymentID, 
+        payer_id: data.payerID
+        domain_name: domain_name_temp, 
+        period: period_temp
+      }
+
+      executePath = "http://127.0.0.1:3000/payment/execute"
+      return actions.request.post(executePath, params).then(function(response) {
+        if (response.payment_state == "approved") {
+          javascript:window.location.href = 'http://127.0.0.1:3000' // Replace this with your successful registration page
+          
+        }
+      });
+    },
+    onError: function (err) {
+      alert('Error!');
+    }
+  }, '#paypal-checkout');
+
+</script>

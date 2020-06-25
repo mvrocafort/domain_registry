@@ -20,5 +20,18 @@
   <%= @domain.expiration_date %>
 </p>
 
+<p>
+  <strong>Owner:</strong>
+  <%= @domain.user.first_name %>
+</p>
+
+<p>
+  <strong>Registrant:</strong>
+  <%= @domain.registrant_id %>
+</p>
+
 <%= link_to 'Edit', edit_domain_path(@domain) %> |
 <%= link_to 'Back', domains_path %>
+
+
+<br>

@@ -1,13 +1,3 @@
-<h1>Register Domain</h1>
-
-<%= render 'form', domain: @domain %>
-
-<%= link_to 'Back', domains_path %>
-
-<br>
-
-
-
 <div id="paypal-checkout"></div>
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 <script>
@@ -28,31 +18,21 @@
       disallowed: [paypal.FUNDING.CREDIT]
     },
     payment: function(data, actions) {
-      var domain_name_temp = document.getElementById("domain_domain_name").value
-      var period_temp = document.getElementById("domain_period").value
-      params = {domain_name: domain_name_temp, period: period_temp};
+      params = {};
       
-      createPath = "http://127.0.0.1:3000/payment/create"
+      createPath = "http://localhost:3000/payment/create"
       return actions.request.post(createPath, params).then(function(response) {
         console.log(response);
         return response.id;
       });
     },
     onAuthorize: function(data, actions) {
-      var domain_name_temp = document.getElementById("domain_domain_name").value
-      var period_temp = document.getElementById("domain_period").value
+      params = {payment_id: data.paymentID, payer_id: data.payerID}
 
-      params = {
-          payment_id: data.paymentID, 
-          payer_id: data.payerID,
-          domain_name: domain_name_temp, 
-          period: period_temp
-          }
-
-      executePath = "http://127.0.0.1:3000/payment/execute"
+      executePath = "http://localhost:3000/payment/execute"
       return actions.request.post(executePath, params).then(function(response) {
         if (response.payment_state == "approved") {
-          javascript:window.location.href = 'http://127.0.0.1:3000' // Replace this with your successful registration page
+          javascript:window.location.href = 'http://localhost:3000' // Replace this with your successful registration page
           
         }
       });
