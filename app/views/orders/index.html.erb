@@ -1,0 +1,37 @@
+<div class="main">
+  <h1>Orders</h1>
+
+  <div class="">
+
+
+    <div class="">
+      <table>
+        <tr>
+          <th>Order</th>
+          <th>User</th>
+          <th>Domain</th>
+        </tr>
+        <% @orders.each do |order| %>
+          <tr>
+            <td>
+              <%= order.id %>
+            </td>
+            <td>
+              <%= order.user %>
+            </td>
+            <td>
+              <%= order.domain %>
+            </td>
+            <td>
+              <%= link_to 'Show', order_path(order.id) %>
+            </td>
+            <td>
+              <%= link_to 'Delete', order_path(order.id), method: :delete %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    <%= link_to 'Create new Order', new_order_path %>
+  </div>
+</div>

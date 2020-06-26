@@ -1,0 +1,10 @@
+<h1>Show</h1>
+
+
+<p>Domain name: <%= @domain.name %></p>
+<p>Registration Date: <%= @domain.registration_date %></p>
+<p>Expiration Date: <%= @domain.expiration_date %></p>
+<p>Registered to: <%= @domain.user.full_name %></p>
+
+<%= link_to 'Edit Domain', edit_domain_path(@domain.id) %>
+<%= link_to 'Back', domains_path %>

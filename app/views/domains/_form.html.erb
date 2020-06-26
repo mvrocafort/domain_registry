@@ -35,10 +35,7 @@
     <%= form.submit %>
   </div>
 
-  <p>Registrant:</p>
-  <%= form.fields_for :registrants do |registrant| %>
-    <%= registrant.text_field :handle %>
-  <% end %>
+
 <% end %>
 
 <div id="paypal-checkout"></div>

@@ -6,8 +6,11 @@ Rails.application.routes.draw do
   resources :registrants
   resources :details
   resources :domains
+  resources :orders
+  resources :payment_transactions
 
   get 'search/result' => 'domains#result', :as => 'result_page'
+  # get 'receipt' => 'domains#result', :as => 'result_page'
   
   get '/payment/paypal', to: 'payments#paypal'
   post '/payment/create', to: 'payments#create'

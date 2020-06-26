@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_091405) do
+ActiveRecord::Schema.define(version: 2020_06_26_051432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,17 @@ ActiveRecord::Schema.define(version: 2020_06_25_091405) do
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "registrant_id"
+    t.index ["registrant_id"], name: "index_details_on_registrant_id"
+  end
+
+  create_table "domain_prices", force: :cascade do |t|
+    t.string "price_cents"
+    t.string "currency"
+    t.bigint "domain_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["domain_id"], name: "index_domain_prices_on_domain_id"
   end
 
   create_table "domains", force: :cascade do |t|
@@ -32,11 +43,27 @@ ActiveRecord::Schema.define(version: 2020_06_25_091405) do
     t.datetime "expiration_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
     t.string "handle"
     t.bigint "registrant_id"
+    t.bigint "user_id"
+    t.bigint "order_id"
+    t.index ["order_id"], name: "index_domains_on_order_id"
     t.index ["registrant_id"], name: "index_domains_on_registrant_id"
     t.index ["user_id"], name: "index_domains_on_user_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payment_transactions", force: :cascade do |t|
+    t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payment_transactions_on_order_id"
   end
 
   create_table "registrants", force: :cascade do |t|
@@ -44,6 +71,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_091405) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.string "handle"
+    t.string "contact_handle"
     t.index ["user_id"], name: "index_registrants_on_user_id"
   end
 
@@ -62,4 +90,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_091405) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "domain_prices", "domains"
+  add_foreign_key "orders", "users"
+  add_foreign_key "payment_transactions", "orders"
 end

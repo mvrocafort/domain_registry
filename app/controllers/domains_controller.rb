@@ -13,6 +13,7 @@ class DomainsController < ApplicationController
   def show
   end
 
+
   # GET /domains/new
   def new
     @domain = Domain.new
@@ -25,8 +26,24 @@ class DomainsController < ApplicationController
   # POST /domains
   # POST /domains.json
   def create
+    # create registrant -> create order -> create domain
+    @order = Order.create(user_id:current_user.id)
+    @order.save
+
+    if @order.save
+      puts "order created with id #{@order.id}"
+    else
+      puts 'order creation failed'
+    end
+
     @domain = current_user.domains.new(domain_params)
 
+    @domain.user_id = current_user.id
+    @domain.registrant_id = '1'
+    @domain.order_id = @order.id
+
+    #dom = Domain.create(domain_name:'test.com', registrant_id:'1', order_id:'3', user_id:'1')
+    # create an order first
     respond_to do |format|
       if @domain.save
         format.html { redirect_to @domain, notice: 'Domain was successfully created.' }
@@ -118,9 +135,11 @@ class DomainsController < ApplicationController
         :expiration_date,
         :handle, 
         :search,
-        registrants_attributes: [
-          :user_id,
-          :handle,
+        domain_price_attributes: [
+          :id,
+          :price,
+          :price_cents,
+          :price_currency
         ]
       )
     end

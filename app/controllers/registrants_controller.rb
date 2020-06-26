@@ -25,10 +25,14 @@ class RegistrantsController < ApplicationController
   # POST /registrants.json
   def create
     @registrant = Registrant.new(registrant_params)
+    @build_detail_temp = @registrant.build_detail(registrant_params[:detail_attributes])
+
+    # raise @reg_temp.inspect
 
     respond_to do |format|
       if @registrant.save
-        format.html { redirect_to @registrant, notice: 'Registrant was successfully created.' }
+        @build_detail_temp.save
+        format.html { redirect_to new_domain_path, notice: 'Registrant was successfully created.' }
         format.json { render :show, status: :created, location: @registrant }
       else
         format.html { render :new }
@@ -69,6 +73,12 @@ class RegistrantsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def registrant_params
-      params.require(:registrant).permit(:contact_handle)
+      params.require(:registrant).permit(
+        :contact_handle,
+        :handle,
+        detail_attributes: [
+          :first_name, :last_name, :organization, :contact_number, :address
+        ]
+      )
     end
 end

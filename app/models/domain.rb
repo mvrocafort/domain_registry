@@ -1,8 +1,9 @@
 class Domain < ApplicationRecord
 	belongs_to :user
-	belongs_to :registrant
-	# belongs_to :registrant
-	#accepts_nested_attributes_for :registrant
+	belongs_to :order
+	has_one :domain_price
+	accepts_nested_attributes_for :domain_price
+	has_one :registrant
 
 	def self.search(search)
 		#search is the domain name

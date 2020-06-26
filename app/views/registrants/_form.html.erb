@@ -16,6 +16,29 @@
     <%= form.text_field :contact_handle %>
   </div>
 
+  <div class="field">
+    <%= form.label :handle %>
+    <%= form.text_field :handle %>
+  </div>
+
+  <p>Details:</p>
+  <%= form.fields_for :detail_attributes, @registrant.detail do |detail| %>
+    <%= detail.label :first_name %>
+    <%= detail.text_field :first_name %>
+
+    <%= detail.label :last_name %>
+    <%= detail.text_field :last_name %>
+
+    <%= detail.label :organization %>
+    <%= detail.text_field :organization %>
+
+    <%= detail.label :contact_number %>
+    <%= detail.text_field :contact_number %>
+
+    <%= detail.label :address %>
+    <%= detail.text_field :address %>
+  <% end %>
+
   <div class="actions">
     <%= form.submit %>
   </div>
