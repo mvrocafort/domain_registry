@@ -19,6 +19,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'rubocop', '~> 0.86.0'
 gem 'devise', '~> 4.7', '>= 4.7.2'
 gem 'money-rails', '~> 1.13', '>= 1.13.3'
+gem 'ransack', '~> 2.3', '>= 2.3.2'
 gem 'epp-client',           github: 'dotph/epp-client'
 
 gem 'paypal-sdk-rest', '~> 1.7.2', github: 'dotph/PayPal-Ruby-SDK'

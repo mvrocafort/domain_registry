@@ -28,7 +28,7 @@
 <% else %>
   <% if @available_flag == true %>
 
-        <%= link_to 'Domain available. Do you want to register this domain?', new_domain_path({:domain_name => @search_temp}) %>
+        <%= link_to 'Domain available. Do you want to register this domain?', new_registrant_path({:domain_name => @search_temp}) %>
 
   <% else %>
     Domain unavailable.

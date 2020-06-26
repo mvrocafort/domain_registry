@@ -39,10 +39,9 @@ class DomainsController < ApplicationController
     @domain = current_user.domains.new(domain_params)
 
     @domain.user_id = current_user.id
-    @domain.registrant_id = '1'
+    @domain.registrant_id = Registrant.last.id
     @domain.order_id = @order.id
 
-    #dom = Domain.create(domain_name:'test.com', registrant_id:'1', order_id:'3', user_id:'1')
     # create an order first
     respond_to do |format|
       if @domain.save
@@ -84,10 +83,6 @@ class DomainsController < ApplicationController
   end
 
   def result
-    #@domains = Domain.search(params[:search])
-    #@domains = current_user.domains
-    #@domains = current_user.domains.search(params[:search])
-    #@domains = Domain.search(params[:search])
     @renew_flag = false
     @available_flag = false
 
@@ -95,28 +90,35 @@ class DomainsController < ApplicationController
       @domains = current_user.domains.search(params[:search]) #return domains of user
       @renew_flag = true
     else #no registered domains under current user, check in epp if available
-      		host      = "172.16.46.55"
-          username  = "testmrocafort"
-          password  = "Password123"
-        
-          client = EPP::Client.new username, password, host
-        
-          #epp checker for domain availability
-          command   = EPP::Domain::Check.new(params[:search])
-          response  = client.check command
-          check     = EPP::Domain::CheckResponse.new response
-        
-          if check.available? #if available, show register link to user (use a flag to be used in view)
-            @domains = Domain.search(params[:search])
-            flash.now[:notice] = 'Domain available!'
-            @available_flag = true
+          @domains = Domain.search(params[:search])
+          flash.now[:notice] = 'Domain available!'
+          @available_flag = true
 
-            #temp variable to pass input to register model
-            @search_temp = params[:search]
-          else #if not available, do nothing
-            redirect_to '/'
-            flash[:notice] = 'Domain unavailable!'
-          end
+          #temp variable to pass input to register model
+          @search_temp = params[:search]
+
+      		# host      = "172.16.46.55"
+          # username  = "testmrocafort"
+          # password  = "Password123"
+        
+          # client = EPP::Client.new username, password, host
+        
+          # #epp checker for domain availability
+          # command   = EPP::Domain::Check.new(params[:search])
+          # response  = client.check command
+          # check     = EPP::Domain::CheckResponse.new response
+        
+          # if check.available? #if available, show register link to user (use a flag to be used in view)
+          #   @domains = Domain.search(params[:search])
+          #   flash.now[:notice] = 'Domain available!'
+          #   @available_flag = true
+
+          #   #temp variable to pass input to register model
+          #   @search_temp = params[:search]
+          # else #if not available, do nothing
+          #   redirect_to '/'
+          #   flash[:notice] = 'Domain unavailable!'
+          # end
     end
   end
 

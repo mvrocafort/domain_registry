@@ -11,17 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :contact_handle %>
-    <%= form.text_field :contact_handle %>
-  </div>
-
-  <div class="field">
-    <%= form.label :handle %>
-    <%= form.text_field :handle %>
-  </div>
-
-  <p>Details:</p>
+  <p>Registrant Details:</p>
   <%= form.fields_for :detail_attributes, @registrant.detail do |detail| %>
     <%= detail.label :first_name %>
     <%= detail.text_field :first_name %>
@@ -38,8 +28,88 @@
     <%= detail.label :address %>
     <%= detail.text_field :address %>
   <% end %>
+<hr>
+  <p>Domain Details:</p>
+  <%= form.fields_for :domain_attributes, @registrant.domain do |domain| %>
+  <div class="field">
+    <%= domain.label :domain_name, :value => params[:domain_name]  %>
+    <%= domain.text_field :domain_name %>
+  </div>
+
+  <div class="field">
+    <%= domain.label :period %>
+    <%= domain.select :period, ['3 months', '1 year', '2 years', '5 years', '10 years'] %>
+  </div>
+
+  <div class="field">
+    <%= domain.label :registration_date %>
+    <%= domain.datetime_select :registration_date %>
+  </div>
+
+  <div class="field">
+    <%= domain.label :expiration_date %>
+    <%= domain.datetime_select :expiration_date %>
+  </div>
+  <% end %>
 
   <div class="actions">
     <%= form.submit %>
   </div>
 <% end %>
+
+
+<div id="paypal-checkout"></div>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+  paypal.Button.render({
+    env: "sandbox",
+    client: {
+      sandbox: "AW4I8tHeTC_xdRHrcvpgD2RgBHC-QlhnNO3uP_ZyUjpCanJbxbMvM3qI9nbnSv2ZtrMf_jNOZMuJV055"
+    },
+    style: {
+      layout: 'vertical',
+      size:  'medium',
+      shape: 'rect',
+      color: 'blue',
+    },
+    commit: true,
+    funding: {
+      allowed: [paypal.FUNDING.CARD],
+      disallowed: [paypal.FUNDING.CREDIT]
+    },
+    payment: function(data, actions) {
+      var domain_name_temp = document.getElementById("registrant_domain_attributes_domain_name").value
+      var period_temp = document.getElementById("registrant_domain_attributes_period").value
+      params = {domain_name: domain_name_temp, period: period_temp};
+      
+      createPath = "http://127.0.0.1:3000/payment/create"
+      return actions.request.post(createPath, params).then(function(response) {
+        console.log(response);
+        return response.id;
+      });
+    },
+    onAuthorize: function(data, actions) {
+      var domain_name_temp = document.getElementById("registrant_domain_attributes_domain_name").value
+      var period_temp = document.getElementById("registrant_domain_attributes_period").value
+
+      params = {
+          payment_id: data.paymentID, 
+          payer_id: data.payerID,
+          domain_name: domain_name_temp, 
+          period: period_temp
+          }
+
+      executePath = "http://127.0.0.1:3000/payment/execute"
+      return actions.request.post(executePath, params).then(function(response) {
+        if (response.payment_state == "approved") {
+          javascript:window.location.href = 'http://127.0.0.1:3000' // Replace this with your successful registration page
+          
+        }
+      });
+    },
+    onError: function (err) {
+      alert('Error!');
+    }
+  }, '#paypal-checkout');
+
+</script>

@@ -1,9 +1,32 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Contact handle:</strong>
-  <%= @registrant.contact_handle %>
+  <strong>Registrant handle:</strong>
+  <%= @registrant.handle %>
 </p>
+
+<p>
+  <strong>First Name:</strong>
+  <%= @registrant.detail.first_name %>
+</p>
+
+<p>
+  <strong>Last Name:</strong>
+  <%= @registrant.detail.last_name %>
+</p>
+
+
+<p>
+  <strong>Organization:</strong>
+  <%= @registrant.detail.organization %>
+</p>
+
+
+<p>
+  <strong>Address:</strong>
+  <%= @registrant.detail.address %>
+</p>
+
 
 <%= link_to 'Edit', edit_registrant_path(@registrant) %> |
 <%= link_to 'Back', registrants_path %>

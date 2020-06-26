@@ -24,15 +24,31 @@ class RegistrantsController < ApplicationController
   # POST /registrants
   # POST /registrants.json
   def create
+    @timestamp = '%10.6f' % Time.now.to_f
+    @handle = @timestamp.sub('.', '')
+
     @registrant = Registrant.new(registrant_params)
     @build_detail_temp = @registrant.build_detail(registrant_params[:detail_attributes])
 
+    @registrant.handle = 'somehandle'
+
     # raise @reg_temp.inspect
+    @order = Order.create(user_id:current_user.id)
+        @order.save
+
+    # @domain = current_user.domains.new(domain_params)
+    @build_domain_temp = @registrant.build_domain(registrant_params[:domain_attributes])
+
+    @build_domain_temp.user_id = current_user.id
+    @build_domain_temp.registrant_id = @registrant.id
+    @build_domain_temp.order_id = @order.id
 
     respond_to do |format|
       if @registrant.save
         @build_detail_temp.save
-        format.html { redirect_to new_domain_path, notice: 'Registrant was successfully created.' }
+        @build_domain_temp.save
+
+        format.html { redirect_to domains_path, notice: 'Registrant was successfully created.' }
         format.json { render :show, status: :created, location: @registrant }
       else
         format.html { render :new }
@@ -74,11 +90,18 @@ class RegistrantsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def registrant_params
       params.require(:registrant).permit(
-        :contact_handle,
         :handle,
         detail_attributes: [
           :first_name, :last_name, :organization, :contact_number, :address
+        ],
+        domain_attributes: [
+          :domain_name, 
+          :period, 
+          :registration_date, 
+          :expiration_date,
+          :handle
         ]
       )
     end
 end
+
