@@ -30,7 +30,7 @@ class RegistrantsController < ApplicationController
     @registrant = Registrant.new(registrant_params)
     @build_detail_temp = @registrant.build_detail(registrant_params[:detail_attributes])
 
-    @registrant.handle = 'somehandle'
+    @registrant.handle = @handle
 
     # raise @reg_temp.inspect
     @order = Order.create(user_id:current_user.id)
